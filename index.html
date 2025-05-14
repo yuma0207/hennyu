@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>編入試験問題解答解説</title>
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
+  <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+  <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+</head>
+<body>
+  <h1>編入試験問題解答解説</h1>
+  <table id="example" class="display">
+    <thead>
+      <tr>
+        <th>タイトル</th>
+        <th>詳細</th>
+        <th>公開日</th>
+        <th>URL</th>
+        <th>概要</th>
+        <th>年</th>
+        <th>問題番号</th>
+        <th>ハッシュタグ</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- CSV データがここに挿入されます -->
+    </tbody>
+  </table>
+
+  <script>
+    $(document).ready(function() {
+      // PapaParse を使って CSV ファイルを読み込み
+      Papa.parse('dataframe.csv', {
+        download: true,
+        header: true,
+        dynamicTyping: true,
+        complete: function(results) {
+          const data = results.data;
+          
+          // 表のボディに行を追加
+          data.forEach(function(row) {
+            $('#example').DataTable().row.add([
+              row['タイトル'],
+              row['詳細'],
+              row['公開日'],
+              `<a href="${row['URL']}">リンク</a>`,
+              row['概要'],
+              row['年'],
+              row['問題番号'],
+              row['ハッシュタグ']
+            ]).draw();
+          });
+        }
+      });
+
+      // DataTable を初期化
+      $('#example').DataTable();
+    });
+  </script>
+</body>
+</html>
