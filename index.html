@@ -86,6 +86,10 @@
 
         $('#example').DataTable({
           data: dataSet,
+          autoWidth: false,
+          columnDefs: [
+            { targets: '_all', whiteSpace: 'normal' }
+          ],
           columns: [
             { title: 'Index', width: '5%' },
             { title: 'タイトル', width: '15%' },
