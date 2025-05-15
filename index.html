@@ -18,6 +18,14 @@
       text-overflow: ellipsis;
       white-space: nowrap;
     }
+    table.dataTable {
+      table-layout: auto !important;  /* 固定幅解除して自動調整 */
+    }
+    table.dataTable td {
+      white-space: normal !important;  /* 折り返しOK */
+      overflow: visible !important;    /* 省略解除 */
+      text-overflow: clip !important;  /* 省略記号OFF */
+    }
   </style>
 </head>
 <body>
@@ -86,7 +94,6 @@
 
         $('#example').DataTable({
           data: dataSet,
-          autoWidth: false,
           columnDefs: [
             { targets: '_all', whiteSpace: 'normal' }
           ],
@@ -101,6 +108,7 @@
             { title: '問題番号', width: '5%' },
             { title: 'ハッシュタグ', width: '15%' }
           ],
+          autoWidth: true,
           language: {
             url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Japanese.json"
           }
