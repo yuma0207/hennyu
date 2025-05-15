@@ -55,18 +55,28 @@
             row['タイトル'] &&
             row['URL']
           )
-          .map(row => [
-            row['Index'],
-            row['タイトル'],
-            row['詳細'],
-            row['公開日'],
-            `<a href="${row['URL']}" target="_blank" rel="noopener noreferrer">リンク</a>`,
-            row['概要'],
-            row['年'],
-            row['問題番号'],
-            row['ハッシュタグ']
-          ]);
-
+          .map(row => {
+            // ハッシュタグ変換
+            let rawTag = row['ハッシュタグ'] || '';
+            rawTag = rawTag.trim();
+            if (rawTag.startsWith('[') && rawTag.endsWith(']')) {
+              rawTag = rawTag.slice(1, -1);
+            }
+            let tagsArray = rawTag ? rawTag.split(',').map(s => s.trim()) : [];
+            let formattedTags = tagsArray.map(tag => '#' + tag).join(' ');
+          
+            return [
+              row['Index'],
+              row['タイトル'],
+              row['詳細'],
+              row['公開日'],
+              `<a href="${row['URL']}" target="_blank" rel="noopener noreferrer">リンク</a>`,
+              row['概要'],
+              row['年'],
+              row['問題番号'],
+              formattedTags  // ここに変換済みタグを入れる
+            ];
+          })
         if (dataSet.length === 0) {
           alert("CSVファイルに有効なデータが見つかりませんでした。");
         }
