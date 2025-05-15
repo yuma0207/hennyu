@@ -38,21 +38,43 @@
         header: true,
         dynamicTyping: true,
         complete: function(results) {
-          const data = results.data;
-          
-          // 表のボディに行を追加
-          data.forEach(function(row) {
-            $('#example').DataTable().row.add([
+          // デバッグ用出力
+          console.log("全行数:", results.data.length);
+          results.data.forEach((row, i) => {
+            const cols = Object.keys(row).length;
+            if (cols !== 9) {
+              console.warn(`⚠️ 行 ${i + 1} の列数: ${cols}`, row);
+            }
+          });
+
+          // カラムが不足していない行だけ使う
+          const dataSet = results.data
+            .filter(row => row['Index'] && row['タイトル'] && row['詳細'] && row['URL'])
+            .map(row => [
               row['Index'],
               row['タイトル'],
               row['詳細'],
               row['公開日'],
-              `<a href="${row['URL']}">リンク</a>`,
+              `<a href="${row['URL']}" target="_blank">リンク</a>`,
               row['概要'],
               row['年'],
               row['問題番号'],
               row['ハッシュタグ']
-            ]).draw();
+            ]);
+
+          $('#example').DataTable({
+            data: dataSet,
+            columns: [
+              { title: 'Index' },
+              { title: 'タイトル' },
+              { title: '詳細' },
+              { title: '公開日' },
+              { title: 'URL' },
+              { title: '概要' },
+              { title: '年' },
+              { title: '問題番号' },
+              { title: 'ハッシュタグ' }
+            ]
           });
         }
       });
