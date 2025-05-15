@@ -62,7 +62,10 @@
             if (rawTag.startsWith('[') && rawTag.endsWith(']')) {
               rawTag = rawTag.slice(1, -1);
             }
-            let tagsArray = rawTag ? rawTag.split(',').map(s => s.trim()) : [];
+            let tagsArray = rawTag
+              ? rawTag.split(',')
+                .map(s => s.trim().replace(/^'+|'+$/g, '')) // シングルクォート削除
+              : [];
             let formattedTags = tagsArray.map(tag => '#' + tag).join(' ');
           
             return [
